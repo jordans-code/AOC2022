@@ -1,5 +1,11 @@
+def getinput():
+    with open("input.txt") as f:
+        lines = f.readlines()
+        return lines
 
-def getSums(rawinput):
+
+def getsums(rawinput):
+    """Returns an array of ints which are the sums of the calories of the elves"""
     stripped = [entry.strip() for entry in rawinput]
     sums = []
     tempsum = 0
@@ -11,11 +17,18 @@ def getSums(rawinput):
             tempsum = 0
     return sums
 
-with open("input.txt") as f:
-    lines = f.readlines()
-    sums = getSums(lines)
-    print(max(sums)) # part 1
 
-    # part2
+def main():
+    lines = getinput()
+    sums = getsums(lines)
+
+    part1 = max(sums)
+    print(f"Part 1 solution: {part1}")
+
     sums.sort(reverse=True)
-    print(sum(sums[0:3]))
+    part2 = sum(sums[0:3])
+    print(f"Part 2 solution: {part2}")
+
+
+if __name__ == "__main__":
+    main()

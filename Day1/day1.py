@@ -1,5 +1,5 @@
 
-def day1(rawinput):
+def getSums(rawinput):
     stripped = [entry.strip() for entry in rawinput]
     sums = []
     tempsum = 0
@@ -13,7 +13,7 @@ def day1(rawinput):
 
 with open("input.txt") as f:
     lines = f.readlines()
-    sums = day1(lines)
+    sums = getSums(lines)
     print(max(sums)) # part 1
 
     # part2

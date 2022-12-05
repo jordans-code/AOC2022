@@ -12,25 +12,17 @@ def getcommands(input):
 
 
 def getlastcrates(cargomap):
-    lastlist = ""
-    for stack in cargomap:
-        lastlist += stack[-1]
-    return lastlist
+    return "".join([stack[-1] for stack in cargomap])
 
 
 def parsemap(cargomap):
-    cratestacks= []
-    for i in range(9):
-        cratestacks.append([])
+    cratestacks = [[] for _ in range(9)]
     for inputline in cargomap:
         for i in range(2, len(cargomap[0]), 4):
-            if (i+1) % 4 == 0:
-                pass
-            else:
-                letter = i-1
-                col = (letter-1)//4
-                if inputline[i-1] != " ":
-                    cratestacks[col].insert(0, inputline[i-1])
+            crateletter = i-1
+            col = (crateletter-1)//4
+            if inputline[crateletter] != " ":
+                cratestacks[col].insert(0, inputline[i-1])
     return cratestacks
 
 

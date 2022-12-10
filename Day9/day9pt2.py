@@ -10,10 +10,9 @@ def getinput():
 
 
 class TailPoint:
-    def __init__(self, part):
+    def __init__(self):
         self.x = 0
         self.y = 0
-        self.part = part
 
     moveordermap = {"D": (0, -1),
                     "U": (0, 1),
@@ -57,23 +56,21 @@ class TailPoint:
         if diffx == 1:  # If we need to move left or right
             self.x = followx
             dir = "U" if followy > self.y else "D"
-            self.move(dir)
-        elif diffy == 1:  # If we need to move up or down
+        else:  # If we need to move up or down
             self.y = followy
             dir = "R" if followx > self.x else "L"
-            self.move(dir)
+        self.move(dir)
 
     def handlemove(self, followx, followy):
         diffx, diffy = self.determinediff(followx, followy)
-        if diffx < 2 and diffy < 2:  # If the part we are following is 1 x and 1 y away or less.
-            pass
-        elif diffx == 2 and diffy == 2: # If diagonal
+        if diffx < 2 and diffy < 2: pass  # If the part we are following is 1 x and 1 y away or less.
+        elif diffx == 2 and diffy == 2:  # If diagonal
             self.diagonalmove(followx, followy)
-        elif diffx == 0: # if up or down move
+        elif diffx == 0:  # if up or down move
             self.verticalmove(followy)
-        elif diffy == 0: # if right or left move
+        elif diffy == 0:  # if right or left move
             self.horizontalmove(followx)
-        else: # if partial diagonal (2 up 1 right etc)
+        else:  # if partial diagonal (2 up 1 right etc)
             self.unevendiagonalmove(followx, followy, diffx, diffy)
 
 
@@ -94,7 +91,6 @@ def printboard():
     minX = min(allxpoints)
     maxX = max(allxpoints)
     diffX = maxX - minX
-
     for rowI in range((diffY * 2 + 1)):
         row = ["."] * (diffX * 2 + 1)
         board.append(row)
@@ -108,7 +104,7 @@ def printboard():
 
 def main():
     moveorders = getinput()
-    tails = [TailPoint(x) for x in range(10)]  # 0 is the head, 9 is the true "tail" for the problem.
+    tails = [TailPoint() for _ in range(10)]  # 0 is the head, 9 is the true "tail" for the problem.
     currentheadpos = (0, 0)
     for moveorder in moveorders:
         currentheadpos = movehead(currentheadpos, moveorder)
@@ -125,5 +121,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

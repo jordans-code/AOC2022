@@ -1,6 +1,3 @@
-VisitedPoints = set()
-
-
 def getinput():
     with open("input.txt") as f:
         lines = f.readlines()
@@ -10,22 +7,23 @@ def getinput():
 
 
 class TailPoint:
-    def __init__(self):
+    def __init__(self, tail_length):
         self.x = 0
         self.y = 0
-
-    moveordermap = {"D": (0, -1),
+        self.tail_length = tail_length
+        self.VisitedPoints = set()
+    move_order_map = {"D": (0, -1),
                     "U": (0, 1),
                     "L": (-1, 0),
                     "R": (1, 0)}
 
     def move(self, direction):
-        newx, newy = TailPoint.moveordermap[direction]
+        newx, newy = TailPoint.move_order_map[direction]
         self.x += newx
         self.y += newy
 
     def logvisited(self):
-        VisitedPoints.add((self.x, self.y))
+        self.VisitedPoints.add((self.x, self.y))
 
     def getpoints(self):
         return (self.x, self.y)
@@ -75,11 +73,11 @@ class TailPoint:
 
 
 def movehead(currentpos, moveorder):
-    xchange, ychange = TailPoint.moveordermap[moveorder]
+    xchange, ychange = TailPoint.move_order_map[moveorder]
     return (currentpos[0]+xchange, currentpos[1]+ychange)
 
 
-def printboard():
+def printboard(VisitedPoints):
     """Visualizes the tail moving around in a grid. Useful for when you write buggy code and can't find an issue,
     speaking from personal experience"""
     board = []
@@ -102,9 +100,7 @@ def printboard():
         print(row)
 
 
-def main():
-    moveorders = getinput()
-    tails = [TailPoint() for _ in range(10)]  # 0 is the head, 9 is the true "tail" for the problem.
+def snakemover(moveorders, tails):
     currentheadpos = (0, 0)
     for moveorder in moveorders:
         currentheadpos = movehead(currentheadpos, moveorder)
@@ -113,11 +109,33 @@ def main():
         for taili in range(1, len(tails)):
             lasttailx, lasttaily = tails[taili-1].getpoints()
             tails[taili].handlemove(lasttailx, lasttaily)
-            if taili == 9:
+            if taili+1 == tails[taili].tail_length:
                 tails[taili].logvisited()
-    #printboard()
-    print("The back tail of the snake visits these many unique positions: " + str(len(VisitedPoints)))
+    return tails
 
+
+def part1(moveorders):
+    taillength = 2
+    tails = [TailPoint(taillength) for _ in range(taillength)]  # 0 is the head, 9 is the true "tail" for the problem.
+    tails = snakemover(moveorders, tails)
+    #printboard(tails[taillength-1].VisitedPoints)
+    return "The back tail of the snake visits these many unique positions for part1: " + str(len(tails[taillength-1].VisitedPoints))
+
+
+def part2(moveorders):
+    taillength = 10
+    tails = [TailPoint(taillength) for _ in range(taillength)]  # 0 is the head, 9 is the true "tail" for the problem.
+    tails = snakemover(moveorders, tails)
+    #printboard(tails[taillength-1].VisitedPoints)
+    return "The back tail of the snake visits these many unique positions for part2: " + str(len(tails[taillength-1].VisitedPoints))
+
+
+def main():
+    moveorders = getinput()
+    part1solution = part1(moveorders)
+    print(part1solution)
+    part2solution = part2(moveorders)
+    print(part2solution)
 
 if __name__ == "__main__":
     main()
